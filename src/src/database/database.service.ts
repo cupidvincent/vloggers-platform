@@ -11,31 +11,4 @@ export class DatabaseService extends PrismaClient {
         });
         super({ adapter });
     }
-
-    /**
-     *
-     * refresh tokens operations
-     *
-     */
-
-    async findRefreshTokens(userId: number) {
-        return this.refreshToken.findMany({
-            where: { userId },
-        });
-    }
-
-    async deleteRefreshToken(id: number) {
-        return this.refreshToken.delete({
-            where: { id },
-        });
-    }
-
-    async createRefreshToken(userId: number, token: string) {
-        return this.refreshToken.create({
-            data: {
-                token,
-                userId,
-            },
-        });
-    }
 }
