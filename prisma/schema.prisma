@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+  moduleFormat    = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model AuthUsers {
+  id            Int @id @default(autoincrement())
+  firstName     String
+  lastName      String
+  email         String  @unique
+  password      String @default("")
+  refreshTokens RefreshToken[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt 
+}
+
+model RefreshToken {
+  id          Int      @id @default(autoincrement())
+  token       String
+  authUserId  Int
+  user        AuthUsers     @relation(fields: [authUserId], references: [id])
+  createdAt   DateTime @default(now())
+}
+
+/**
+npx prisma migrate dev --name add_users_table
+# Creates a new migration from schema changes, applies it to your local DB, and regenerates Prisma Client.
+# Use this in development after modifying schema.prisma.
+
+npx prisma migrate deploy
+# Applies existing migration files to the database (used in production/CI).
+# Run this during deployment after pulling latest code.
+
+npx prisma db push
+# Syncs schema.prisma directly to the database without creating migration history.
+# Use for quick prototyping or early-stage development.
+
+npx prisma migrate reset
+# Drops the database, re-applies all migrations, and runs seed (if configured).
+# Use when you want a completely fresh local database.
+
+npx prisma migrate status
+# Shows whether your database is up to date with migration files.
+# Useful for debugging migration issues.
+
+npx prisma generate
+# Regenerates Prisma Client after schema changes.
+# Usually runs automatically, but run manually if types seem outdated.
+
+npx prisma db seed
+# Executes the seed script defined in package.json or prisma config.
+# Use to populate initial/test data.
+
+npx prisma studio
+# Opens a browser GUI to view and edit database records.
+# Helpful for inspecting or manually editing data.
+
+npx prisma format
+# Formats schema.prisma file.
+# Use to keep schema clean and consistent.
+
+npx prisma validate
+# Validates schema.prisma for syntax and configuration errors.
+# Run before migrating if you're unsure about schema correctness.
+*/
