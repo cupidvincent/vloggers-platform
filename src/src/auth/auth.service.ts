@@ -1,11 +1,13 @@
+import { DatabaseService } from './../database/database.service';
 import { Injectable } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
+import { Prisma } from 'generated/prisma/client';
 
 @Injectable()
 export class AuthService {
-    create(createAuthDto: CreateAuthDto) {
-        return 'This action adds a new auth';
+    constructor(private databaseService: DatabaseService) {}
+    signup(createAuthDto: Prisma.AuthUsersCreateInput) {
+        return this.databaseService.signup(createAuthDto);
     }
 
     findAll() {
@@ -17,7 +19,7 @@ export class AuthService {
     }
 
     update(id: number, updateAuthDto: UpdateAuthDto) {
-        return `This action updates a #${id} auth`;
+        return `This action updates a #${id} ${updateAuthDto.email} auth`;
     }
 
     remove(id: number) {
