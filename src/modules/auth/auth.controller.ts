@@ -15,8 +15,8 @@ import {
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
-import { LocalAuthGuard } from 'src/guards/local-auth.guard';
-import { JwtRefreshGuard } from 'src/guards/jwt-refresh.guard';
+import { LocalAuthGuard } from '../../guards/local-auth.guard';
+import { JwtRefreshGuard } from '../../guards/jwt-refresh.guard';
 
 @Controller('auth')
 export class AuthController {

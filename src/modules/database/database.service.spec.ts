@@ -1,12 +1,26 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { DatabaseService } from './database.service';
+import { ConfigService } from '@nestjs/config';
 
 describe('DatabaseService', () => {
     let service: DatabaseService;
-
+    const mockConfigService = {
+        getOrThrow: jest.fn((key: string) => {
+            if (key === 'database.url') {
+                return 'postgres://test:test@localhost:5432/testdb';
+            }
+            return null;
+        }),
+    };
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
-            providers: [DatabaseService],
+            providers: [
+                DatabaseService,
+                {
+                    provide: ConfigService,
+                    useValue: mockConfigService,
+                },
+            ],
         }).compile();
 
         service = module.get<DatabaseService>(DatabaseService);
