@@ -5,7 +5,6 @@ import { UpdateAuthDto } from './dto/update-auth.dto';
 import { Prisma } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { jwtConstants } from 'src/config/constants';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
@@ -51,8 +50,8 @@ export class AuthService {
         const access_token = this.jwtService.sign(payload);
 
         const refresh_token = this.jwtService.sign(payload, {
-            secret: jwtConstants.refresh_secret,
-            expiresIn: '7d',
+            secret: this.config.get('jwt.refresh_secret'),
+            expiresIn: this.config.get('jwt.refresh_life'),
         });
         const hashed = await bcrypt.hash(refresh_token, 10);
         const { password, id, ...result } = authUser;
@@ -100,7 +99,7 @@ export class AuthService {
 
         const newRefreshToken = this.jwtService.sign(payload, {
             secret: this.config.get('jwt.refresh_secret'),
-            expiresIn: this.config.get('jwt.efresh_life'),
+            expiresIn: this.config.get('jwt.refresh_life'),
         });
 
         // ❗ delete only the used token (device-specific)
